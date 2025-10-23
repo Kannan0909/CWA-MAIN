@@ -1,0 +1,74 @@
+:root {
+  /* Light Mode */
+  --background: #f1f5f9; 
+  --foreground: #1a202c; 
+  --muted-color: #5a67d8; 
+
+  --nav-bg: #c1dafc; 
+  --card-bg: #d6fbea; 
+  --border-color: #a0aec0; 
+
+  --button-bg: #059669; 
+  --button-hover: #047857; 
+
+  --accent-bg: #5b21b6; 
+  --accent-fg: #ffffff; 
+
+  
+  --success-bg: #059669; 
+  --danger-bg: #dc2626; 
+  --warning-bg: #d97706; 
+}
+
+[data-theme="dark"] {
+  /*  Dark Mode */
+  --background: #0c1220; 
+  --foreground: #e2e8f0; 
+  --muted-color: #959de4; 
+
+  --nav-bg: #1a202c; 
+  --card-bg: #2d3748;
+  --border-color: #4a5568; 
+
+  --button-bg: #059669; 
+  --button-hover: #047857; 
+
+  --accent-bg: #5b21b6; 
+  --accent-fg: #ffffff; 
+
+  --success-bg: #059669; 
+  --danger-bg: #dc2626;
+  --warning-bg: #d97706; 
+}
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.desktop-nav {
+  display: flex;
+}
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  .mobile-menu {
+    display: flex;
+  }
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+}
