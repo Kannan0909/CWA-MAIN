@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  phase     String   @default("WORK") // WORK, COURT, ENDED
+  startTime DateTime @default(now())
+  endTime   DateTime?
+  score     Int      @default(0)
+  penalties Int      @default(0)
+  completed Int      @default(0)
+  ignored   Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  sessionTasks SessionTask[]
+  messages     Message[]
+  verdicts     Verdict[]
+
+  @@map("sessions")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  code        String
+  solution    String
+  violation   String   // Disability Act, Tort, Bankruptcy, etc.
+  difficulty  String   @default("medium") // easy, medium, hard
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sessionTasks SessionTask[]
+
+  @@map("tasks")
+}
+
+model SessionTask {
+  id        String   @id @default(cuid())
+  sessionId String
+  taskId    String
+  status    String   @default("pending") // pending, notice, urgent, completed, failed
+  output    String?
+  penalty   Int      @default(0)
+  startTime DateTime @default(now())
+  endTime   DateTime?
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  task    Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("session_tasks")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  sessionId String
+  sender    String   // Boss, Family, Agile
+  content   String
+  timestamp DateTime @default(now())
+  read      Boolean  @default(false)
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Verdict {
+  id        String   @id @default(cuid())
+  sessionId String
+  taskId    String
+  violation String
+  penalty   Int
+  reason    String
+  timestamp DateTime @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("verdicts")
+}
